@@ -6,6 +6,18 @@ from sklearn.model_selection import train_test_split
 from torch.utils.data import Dataset, DataLoader
 
 
+class Mal_Dataset(Dataset):
+    def __init__(self,x,y):
+        self.x = torch.tensor(x, dtype=torch.float32)
+        self.y = torch.tensor(y, dtype=torch.float32)
+        
+    def __len__(self):
+        return len(sefl.x)
+    
+    def __getitem__(self, index):
+        return self.x[index], self.y[index]
+
+
 def dara_loaders(csv, test_size=0.2, batch_size=128):
     df = pd.read_csv(csv, sep='|')
     
@@ -21,7 +33,7 @@ def dara_loaders(csv, test_size=0.2, batch_size=128):
     
     x_train, x_test, y_train, y_test = train_test_split(x_scaled, y, test_size=test_size, random_state=42)
 
-
+    
 
 
 
