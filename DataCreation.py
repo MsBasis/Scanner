@@ -19,7 +19,9 @@ def psi_delta(superior_n,wavelength,angle,n,d):
     return psi_deg, delta_deg
 
 
-
+for mat in configList:
+    df = pd.read_csv(mat['csv_path'])
+    df.columns = df.columns.str.strip().str.lower()
 
 
 
