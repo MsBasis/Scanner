@@ -12,7 +12,7 @@ class Mal_Dataset(Dataset):
         self.y = torch.tensor(y, dtype=torch.float32)
         
     def __len__(self):
-        return len(sefl.x)
+        return len(self.x)
     
     def __getitem__(self, index):
         return self.x[index], self.y[index]
@@ -33,8 +33,10 @@ def dara_loaders(csv, test_size=0.2, batch_size=128):
     
     x_train, x_test, y_train, y_test = train_test_split(x_scaled, y, test_size=test_size, random_state=42)
 
+    train_loader = DataLoader(Mal_Dataset(x_train, y_train), batch_size=batch_size, shuffle=True)
+    test_loader = DataLoader(Mal_Dataset(x_test, y_test), batch_size=batch_size, shuffle=False)
     
-
+    return train_loader, test_loader, x_train.shape[1]
 
 
 
