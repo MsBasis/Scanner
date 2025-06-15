@@ -3,7 +3,7 @@
 configList = [
     {
         "material": "SiO2",
-        "csv_path": "",
+        "csv_path": "C:\\Studia\\Progranmy\\AnalizaElipsometrii\\Scanner\\RawData\\Lemarchand.csv",
         "K": False,
         "gragas": [50, 100, 150, 200, 250, 300, 400, 500],
         "kat": 70,
@@ -11,7 +11,7 @@ configList = [
     },
     {
         "material": "Al2O3",
-        "csv_path": "",
+        "csv_path": "C:\\Studia\\Progranmy\\AnalizaElipsometrii\\Scanner\\RawData\\Kischkat.csv",
         "K": False,
         "gragas": [50, 100, 150, 200, 250, 300, 400, 500],
         "kat": 70,
@@ -19,7 +19,7 @@ configList = [
     },
     {
         "material": "TiO2",
-        "csv_path": "",
+        "csv_path": "C:\\Studia\\Progranmy\\AnalizaElipsometrii\\Scanner\\RawData\\Sarkar.csv",
         "K": True,
         "gragas": [30, 60, 90, 120, 150, 180, 210, 240],
         "kat": 70,
@@ -27,7 +27,7 @@ configList = [
     },
     {
         "material": "ZnO",
-        "csv_path": "",
+        "csv_path": "C:\\Studia\\Progranmy\\AnalizaElipsometrii\\Scanner\\RawData\\Stelling.csv",
         "K": True,
         "gragas": [40, 80, 120, 160, 200, 240, 280, 320],
         "kat": 70,
@@ -35,7 +35,7 @@ configList = [
     },
     {
         "material": "Si",
-        "csv_path": "",
+        "csv_path": "C:\\Studia\\Progranmy\\AnalizaElipsometrii\\Scanner\\RawData\\Aspnes.csv",
         "K": True,
         "gragas": [20, 40, 60, 80, 100, 150, 200, 250],
         "kat": 70,
@@ -43,7 +43,7 @@ configList = [
     },
     {
         "material": "GaAs",
-        "csv_path": "",
+        "csv_path": "C:\\Studia\\Progranmy\\AnalizaElipsometrii\\Scanner\\RawData\\Aspnes (GaAs).csv",
         "K": True,
         "gragas": [30, 60, 90, 120, 150, 180, 210, 240],
         "kat": 70,
@@ -51,7 +51,7 @@ configList = [
     },
     {
         "material": "Ge",
-        "csv_path": "",
+        "csv_path": "C:\\Studia\\Progranmy\\AnalizaElipsometrii\\Scanner\\RawData\\Aspnes (Ge).csv",
         "K": True,
         "gragas": [30, 60, 90, 120, 150, 180, 210, 240],
         "kat": 70,
@@ -59,7 +59,7 @@ configList = [
     },
     {
         "material": "ITO",
-        "csv_path": "",
+        "csv_path": "C:\\Studia\\Progranmy\\AnalizaElipsometrii\\Scanner\\RawData\\Minenkov-glass.csv",
         "K": True,
         "gragas": [50, 75, 100, 125, 150, 200, 250, 300],
         "kat": 70,
@@ -67,7 +67,7 @@ configList = [
     },
     {
         "material": "Au",
-        "csv_path": "",
+        "csv_path": "C:\\Studia\\Progranmy\\AnalizaElipsometrii\\Scanner\\RawData\\Johnson.csv",
         "K": True,
         "gragas": [10, 20, 30, 40, 50, 60, 70, 80],
         "kat": 70,
@@ -75,7 +75,7 @@ configList = [
     },
     {
         "material": "Ag",
-        "csv_path": "",
+        "csv_path": "C:\\Studia\\Progranmy\\AnalizaElipsometrii\\Scanner\\RawData\\Ciesielski.csv",
         "K": True,
         "gragas": [10, 20, 30, 40, 50, 60, 70, 80],
         "kat": 70,
@@ -83,7 +83,7 @@ configList = [
     },
     {
         "material": "Cr",
-        "csv_path": "",
+        "csv_path": "C:\\Studia\\Progranmy\\AnalizaElipsometrii\\Scanner\\RawData\\Johnson (Cr).csv",
         "K": True,
         "gragas": [10, 20, 30, 40, 50, 60, 70, 80],
         "kat": 70,
@@ -91,7 +91,7 @@ configList = [
     },
     {
         "material": "Ni",
-        "csv_path": "",
+        "csv_path": "C:\\Studia\\Progranmy\\AnalizaElipsometrii\\Scanner\\RawData\\Johnson (Ni).csv",
         "K": True,
         "gragas": [10, 20, 30, 40, 50, 60, 70, 80],
         "kat": 70,
