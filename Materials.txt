@@ -1,15 +1,15 @@
 
-SiO2
-Al2O3
-TiO2
-ZnO 
-Si 
-GaAs
-Ge 
-ITO
-Au 
-Ag
-Cr
-Ni
+SiO2    Lemarchand
+Al2O3   Kischkat
+TiO2    Sarkar
+ZnO     Stelling
+Si      Aspnes
+GaAs    Aspnes (GaAs)
+Ge      Aspnes (Ge)
+ITO     Minenkov-glass
+Au      Johnson
+Ag      Ciesielski
+Cr      Johnson (Cr)
+Ni      Johnson (Ni)
 
 
