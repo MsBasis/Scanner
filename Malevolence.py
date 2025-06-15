@@ -4,7 +4,7 @@ import torch.nn as nn
 
 
 class MLP(nn.Module):
-    def __init__(slef, input_dim):
+    def __init__(self, input_dim):
         super(MLP, self).__init__()
         self.net = nn.Sequential(
             nn.Linear(input_dim, 128),
