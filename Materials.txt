@@ -1,0 +1,15 @@
+
+SiO2
+Al2O3
+TiO2
+ZnO 
+Si 
+GaAs
+Ge 
+ITO
+Au 
+Ag
+Cr
+Ni
+
+
