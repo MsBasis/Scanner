@@ -45,6 +45,8 @@ for mat in configList:
                 'material' : mat['material']
             })
 
+df_out = pd.DataFrame(all)
+df_out.to_csv("C:\\Studia\\Progranmy\\AnalizaElipsometrii\\Scanner\\PreparedMaterials.csv", index=False, sep='|')
 
 
 
