@@ -21,7 +21,29 @@ def psi_delta(superior_n,wavelength,angle,n,d):
 
 for mat in configList:
     df = pd.read_csv(mat['csv_path'])
-    df.columns = df.columns.str.strip().str.lower()
+    df.dropna(inplace=True)
+    
+    df['wl_nm'] = df['wl'].astype(float) * 1000
+    df['n'] = df['n'].astype(float)
+    df['k'] = df['k'].astype(float)
+    
+    for gragases in mat['gragas']:
+        for _, row in df.iterrows():
+            n = row['n']
+            k = row['k']
+            wl = row['wl_nm']
+            superior_n = n +1j * k
+            
+            psi, delta = psi_delta(superior_n, wl, mat['kat'], mat['index'], gragases)
+            all.append({
+                'lambda' : wl,
+                'psi_deg' : psi,
+                'delta_deg' : delta,
+                'n' : n,
+                'k' : k,
+                'thickness' : gragases,
+                'material' : mat['material']
+            })
 
 
 
