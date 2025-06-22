@@ -1,6 +1,7 @@
 #Better late than never
 import torch 
 import torch.nn as nn 
+import torch.optim as optim
 from Data_Loader import dara_loaders
 
 class MLP(nn.Module):
@@ -19,7 +20,26 @@ class MLP(nn.Module):
 
 
 def training_arc(csv, epochs=20, batch_size=128, lr=0.001):
-    pass
+    train, test, input_dim = dara_loaders(csv, batch_size=batch_size)
+    
+    model = MLP(input_dim)
+    criterion = nn.MSELoss()
+    optimizer = optim.Adam(model.parameters(),lr=lr)
+    
+    #actual traini
+    for epoch in range(1, epochs + 1):
+        model.train()
+        run_loss = 0.0
+        for X_batch, y_batch in train:
+            optimizer.zero_grad()
+            outputs = model(X_batch)
+            loss = criterion(outputs, y_batch)
+            loss.backward()
+            optimizer.step()
+            run_loss += loss.item()
+            
+        avgLoss = run_loss / len(train)
+        print(f"[Epoka {epoch:02d}] Średni loss: {avgLoss:.6f}")  
 
 
 
