@@ -9,9 +9,15 @@ class MLP(nn.Module):
         super(MLP, self).__init__()
         self.net = nn.Sequential(
             nn.Linear(input_dim, 128),
-            nn.ReLU(),
+            nn.BatchNorm1d(128),
+            nn.SiLU(),
+            nn.Dropout(0.3),
+            
             nn.Linear(128,64),
-            nn.ReLU(),
+            nn.BatchNorm1d(64),
+            nn.SiLU(),
+            nn.Dropout(0.3),
+            
             nn.Linear(64,2)
         )
         
@@ -39,7 +45,7 @@ def training_arc(csv, epochs=20, batch_size=128, lr=0.001, save = "C:\\Studia\\P
             run_loss += loss.item()
             
         avgLoss = run_loss / len(train)
-        print(f"[Epoka {epoch:02d}] Średni loss: {avgLoss:.6f}")  
+        print(f"[Epoka {epoch:02d}] Sredni loss: {avgLoss:.6f}")  
 
     evaluation(model,test,criterion)
     torch.save(model.state_dict(), save)
