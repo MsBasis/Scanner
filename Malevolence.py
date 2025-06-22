@@ -1,7 +1,7 @@
 #Better late than never
 import torch 
 import torch.nn as nn 
-import torch.optim as optim
+import torch_optimizer as optim
 from Data_Loader import dara_loaders
 
 class MLP(nn.Module):
@@ -34,8 +34,8 @@ def training_arc(csv, epochs=200, batch_size=256, lr=0.001,patience =20, save = 
     train, test, input_dim = dara_loaders(csv, batch_size=batch_size)
     
     model = MLP(input_dim)
-    criterion = nn.SmoothL1Loss()
-    optimizer = optim.Adam(model.parameters(),lr=lr)
+    #criterion = nn.SmoothL1Loss()
+    optimizer = optim.Ranger(model.parameters(), lr=lr)
     scheduler = optim.lr_scheduler.ReduceLROnPlateau(optimizer, mode = 'min', factor=0.5, patience=5, verbose=True)
     best_loss = float('inf')
     patience_count = 0
@@ -48,7 +48,8 @@ def training_arc(csv, epochs=200, batch_size=256, lr=0.001,patience =20, save = 
         for X_batch, y_batch in train:
             optimizer.zero_grad()
             outputs = model(X_batch)
-            loss = criterion(outputs, y_batch)
+            diff = torch.abs(outputs - y_batch)
+            loss = torch.mean(diff[:, 0]) + 5.0 * torch.mean(diff[:, 1])
             loss.backward()
             optimizer.step()
             run_loss += loss.item()
@@ -68,10 +69,10 @@ def training_arc(csv, epochs=200, batch_size=256, lr=0.001,patience =20, save = 
                 print("U crossed me")
                 break
     model.load_state_dict(torch.load(save))
-    evaluation(model,test,criterion)
+    evaluation(model,test)
     return model
 
-def evaluation(model, test_loader, criterion, Ntolerance = 0.05, Ktolerance = 0.05):
+def evaluation(model, test_loader, Ntolerance = 0.05, Ktolerance = 0.01):
     model.eval()
     total_MSE = 0.0
     total_MAE = 0.0
@@ -82,8 +83,9 @@ def evaluation(model, test_loader, criterion, Ntolerance = 0.05, Ktolerance = 0.
     with torch.no_grad():
         for X_batch, y_batch in test_loader:
             outputs = model(X_batch)
-            mse = criterion(outputs, y_batch)
-            mae = torch.mean(torch.abs(outputs - y_batch))
+            diff = torch.abs(outputs - y_batch)
+            mse = torch.mean((outputs - y_batch)**2)
+            mae = torch.mean(diff[:, 0]) + 5.0 * torch.mean(diff[:, 1])
             total_MSE += mse.item()
             total_MAE += mae.item()
             #we need accuracy cause thats the only parameter i actually 100% understand (jk jk)
