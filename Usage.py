@@ -36,7 +36,7 @@ def predict_nk(input_vector, model_path, csv_for_config="C:\\Studia\\Progranmy\\
     return {"n": output[0], "k": output[1]}
 
 
-result = predict_nk(input_vector=[3.871, 1.5467, 250, 50, "SiO2"],model_path="C:\\Studia\\Progranmy\\AnalizaElipsometrii\\Scanner\\modelScanner.pt")
+result = predict_nk(input_vector=[3.871, 1.5467, 250, 50, "SiO2"],model_path="C:\\Studia\\Progranmy\\AnalizaElipsometrii\\Scanner\\modelScanner3.pt")
 print("Predykcja:")
 print(f"n = {result['n']:.4f}, k = {result['k']:.6f}")
 

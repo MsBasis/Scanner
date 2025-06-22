@@ -4,6 +4,7 @@ import torch.nn as nn
 import torch_optimizer as optim
 import torch.optim as t_optim
 from Data_Loader import dara_loaders
+import pandas as pd 
 
 class MLP(nn.Module):
     def __init__(self, input_dim):
@@ -31,7 +32,7 @@ class MLP(nn.Module):
         return self.net(x)
 
 
-def training_arc(csv, epochs=200, batch_size=256, lr=0.001,patience =20, save = "C:\\Studia\\Progranmy\\AnalizaElipsometrii\\Scanner\\modelScanner3.pt"):
+def training_arc(csv, epochs=200, batch_size=256, lr=0.001,patience =20, save = "C:\\Studia\\Progranmy\\AnalizaElipsometrii\\Scanner\\modelScanner4.pt"):
     train, test, input_dim = dara_loaders(csv, batch_size=batch_size)
     
     model = MLP(input_dim)
@@ -79,6 +80,7 @@ def evaluation(model, test_loader, Ntolerance = 0.05, Ktolerance = 0.05):
     G_n = 0
     G_k = 0
     total = 0
+    wyniki = []
     
     with torch.no_grad():
         for X_batch, y_batch in test_loader:
@@ -96,6 +98,8 @@ def evaluation(model, test_loader, Ntolerance = 0.05, Ktolerance = 0.05):
             G_k += torch.sum(torch.abs(kTrue - kPred) < Ktolerance).item()
             total += len(y_batch)
             
+            for nt, np_, kt, kp_ in zip(nTrue, nPred, kTrue,kPred):
+                wyniki.append([nt.item(), np_.item(), kt.item(), kp_.item()])
     avg_MSE = total_MSE / len(test_loader)
     avg_MAE = total_MAE / len(test_loader)
     A_n = G_n / total
@@ -105,7 +109,9 @@ def evaluation(model, test_loader, Ntolerance = 0.05, Ktolerance = 0.05):
     print(f"Test MAE: {avg_MAE:.6f}")
     print(f"Accuracy n ({Ntolerance}): {A_n:.2%}")
     print(f"Accuracy k ({Ktolerance}): {A_k:.2%}")
-
+    df = pd.DataFrame(wyniki, columns=["n_true", "n_pred", "k_true", "k_pred"])
+    df.to_csv("C:\\Studia\\Progranmy\\AnalizaElipsometrii\\Scanner\\hybrid_model_predictions.csv", index=False)
+    
     return avg_MSE, avg_MAE, A_n, A_k
 
 def special_loss(outputs, targets, alpha=0.6, beta=0.4):
