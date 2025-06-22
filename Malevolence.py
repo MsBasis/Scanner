@@ -8,15 +8,20 @@ class MLP(nn.Module):
     def __init__(self, input_dim):
         super(MLP, self).__init__()
         self.net = nn.Sequential(
-            nn.Linear(input_dim, 128),
+            nn.Linear(input_dim, 256),
+            nn.BatchNorm1d(256),
+            nn.SiLU(),
+            nn.Dropout(0.1),
+            
+            nn.Linear(256,128),
             nn.BatchNorm1d(128),
             nn.SiLU(),
-            nn.Dropout(0.3),
+            nn.Dropout(0.1),
             
             nn.Linear(128,64),
             nn.BatchNorm1d(64),
             nn.SiLU(),
-            nn.Dropout(0.3),
+            nn.Dropout(0.1),
             
             nn.Linear(64,2)
         )
@@ -25,7 +30,7 @@ class MLP(nn.Module):
         return self.net(x)
 
 
-def training_arc(csv, epochs=100, batch_size=128, lr=0.001,patience =10, save = "C:\\Studia\\Progranmy\\AnalizaElipsometrii\\Scanner\\modelScanner.pt"):
+def training_arc(csv, epochs=200, batch_size=256, lr=0.001,patience =20, save = "C:\\Studia\\Progranmy\\AnalizaElipsometrii\\Scanner\\modelScanner.pt"):
     train, test, input_dim = dara_loaders(csv, batch_size=batch_size)
     
     model = MLP(input_dim)
@@ -36,6 +41,7 @@ def training_arc(csv, epochs=100, batch_size=128, lr=0.001,patience =10, save = 
     patience_count = 0
     
     #actual traini
+    print('We startin this shi')
     for epoch in range(1, epochs + 1):
         model.train()
         run_loss = 0.0
@@ -95,8 +101,8 @@ def evaluation(model, test_loader, criterion, Ntolerance = 0.05, Ktolerance = 0.
 
     print(f"\nTest MSE: {avg_MSE:.6f}")
     print(f"Test MAE: {avg_MAE:.6f}")
-    print(f"Accuracy n (±{Ntolerance}): {A_n:.2%}")
-    print(f"Accuracy k (±{Ktolerance}): {A_k:.2%}")
+    print(f"Accuracy n ({Ntolerance}): {A_n:.2%}")
+    print(f"Accuracy k ({Ktolerance}): {A_k:.2%}")
 
     return avg_MSE, avg_MAE, A_n, A_k
 
