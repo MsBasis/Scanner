@@ -51,17 +51,39 @@ def training_arc(csv, epochs=20, batch_size=128, lr=0.001, save = "C:\\Studia\\P
     torch.save(model.state_dict(), save)
     return model
 
-def evaluation(model, test_loader, criterion):
+def evaluation(model, test_loader, criterion, Ntolerance = 0.05, Ktolerance = 0.05):
     model.eval()
-    total_loss = 0.0
+    total_MSE = 0.0
+    total_MAE = 0.0
+    G_n = 0
+    G_k = 0
+    total = 0
+    
     with torch.no_grad():
         for X_batch, y_batch in test_loader:
             outputs = model(X_batch)
-            loss = criterion(outputs, y_batch)
-            total_loss += loss.item()
+            mse = criterion(outputs, y_batch)
+            mae = torch.mean(torch.abs(outputs - y_batch))
+            total_MSE += mse.item()
+            total_MAE += mae.item()
+            #we need accuracy cause thats the only parameter i actually 100% understand (jk jk)
+            nTrue, kTrue = y_batch[:,0], y_batch[:,1]
+            nPred, kPred = outputs[:,0], outputs[:,1]
+            
+            G_n += torch.sum(torch.abs(nTrue - nPred) < Ntolerance).item()
+            G_k += torch.sum(torch.abs(kTrue - kPred) < Ktolerance).item()
+            total += len(y_batch)
+            
+    avg_MSE = total_MSE / len(test_loader)
+    avg_MAE = total_MAE / len(test_loader)
+    A_n = G_n / total
+    A_k = G_k / total
 
-    avg_test_loss = total_loss / len(test_loader)
-    print(f"\nTest MSE: {avg_test_loss:.6f}")
-    return avg_test_loss
+    print(f"\nTest MSE: {avg_MSE:.6f}")
+    print(f"Test MAE: {avg_MAE:.6f}")
+    print(f"Accuracy n (±{Ntolerance}): {A_n:.2%}")
+    print(f"Accuracy k (±{Ktolerance}): {A_k:.2%}")
+
+    return avg_MSE, avg_MAE, A_n, A_k
 
 #training_arc("C:\\Studia\\Progranmy\\AnalizaElipsometrii\\Scanner\\PreparedMaterials.csv")
