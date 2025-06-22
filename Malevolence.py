@@ -25,12 +25,15 @@ class MLP(nn.Module):
         return self.net(x)
 
 
-def training_arc(csv, epochs=20, batch_size=128, lr=0.001, save = "C:\\Studia\\Progranmy\\AnalizaElipsometrii\\Scanner\\modelScanner.pt"):
+def training_arc(csv, epochs=100, batch_size=128, lr=0.001,patience =10, save = "C:\\Studia\\Progranmy\\AnalizaElipsometrii\\Scanner\\modelScanner.pt"):
     train, test, input_dim = dara_loaders(csv, batch_size=batch_size)
     
     model = MLP(input_dim)
     criterion = nn.MSELoss()
     optimizer = optim.Adam(model.parameters(),lr=lr)
+    scheduler = optim.lr_scheduler.ReduceLROnPlateau(optimizer, mode = 'min', factor=0.5, patience=5, verbose=True)
+    best_loss = float('inf')
+    patience_count = 0
     
     #actual traini
     for epoch in range(1, epochs + 1):
@@ -47,8 +50,19 @@ def training_arc(csv, epochs=20, batch_size=128, lr=0.001, save = "C:\\Studia\\P
         avgLoss = run_loss / len(train)
         print(f"[Epoka {epoch:02d}] Sredni loss: {avgLoss:.6f}")  
 
+        scheduler.step(avgLoss)
+        if avgLoss < best_loss - 1e-5:
+            best_loss = avgLoss
+            patience_count = 0
+            torch.save(model.state_dict(), save)
+            print('Heck yea it works')
+        else:
+            patience_count += 1
+            if patience_count >= patience:
+                print("U crossed me")
+                break
+    model.load_state_dict(torch.load(save))
     evaluation(model,test,criterion)
-    torch.save(model.state_dict(), save)
     return model
 
 def evaluation(model, test_loader, criterion, Ntolerance = 0.05, Ktolerance = 0.05):
