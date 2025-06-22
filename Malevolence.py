@@ -34,7 +34,7 @@ def training_arc(csv, epochs=200, batch_size=256, lr=0.001,patience =20, save = 
     train, test, input_dim = dara_loaders(csv, batch_size=batch_size)
     
     model = MLP(input_dim)
-    criterion = nn.MSELoss()
+    criterion = nn.SmoothL1Loss()
     optimizer = optim.Adam(model.parameters(),lr=lr)
     scheduler = optim.lr_scheduler.ReduceLROnPlateau(optimizer, mode = 'min', factor=0.5, patience=5, verbose=True)
     best_loss = float('inf')
