@@ -31,7 +31,7 @@ class MLP(nn.Module):
         return self.net(x)
 
 
-def training_arc(csv, epochs=200, batch_size=256, lr=0.001,patience =20, save = "C:\\Studia\\Progranmy\\AnalizaElipsometrii\\Scanner\\modelScanner2.pt"):
+def training_arc(csv, epochs=200, batch_size=256, lr=0.001,patience =20, save = "C:\\Studia\\Progranmy\\AnalizaElipsometrii\\Scanner\\modelScanner3.pt"):
     train, test, input_dim = dara_loaders(csv, batch_size=batch_size)
     
     model = MLP(input_dim)
@@ -49,8 +49,7 @@ def training_arc(csv, epochs=200, batch_size=256, lr=0.001,patience =20, save = 
         for X_batch, y_batch in train:
             optimizer.zero_grad()
             outputs = model(X_batch)
-            diff = torch.abs(outputs - y_batch)
-            loss = torch.mean(diff[:, 0]) + 2.0 * torch.mean(diff[:, 1])
+            loss = special_loss(outputs, y_batch)
             loss.backward()
             optimizer.step()
             run_loss += loss.item()
@@ -108,5 +107,10 @@ def evaluation(model, test_loader, Ntolerance = 0.05, Ktolerance = 0.05):
     print(f"Accuracy k ({Ktolerance}): {A_k:.2%}")
 
     return avg_MSE, avg_MAE, A_n, A_k
+
+def special_loss(outputs, targets, alpha=0.6, beta=0.4):
+    diff = torch.abs(outputs - targets)
+    return alpha * torch.mean(diff[:,0] + beta * torch.mean(diff[:,1]))
+
 
 training_arc("C:\\Studia\\Progranmy\\AnalizaElipsometrii\\Scanner\\PreparedMaterials.csv")
