@@ -2,6 +2,7 @@
 import torch 
 import torch.nn as nn 
 import torch_optimizer as optim
+import torch.optim as t_optim
 from Data_Loader import dara_loaders
 
 class MLP(nn.Module):
@@ -30,13 +31,13 @@ class MLP(nn.Module):
         return self.net(x)
 
 
-def training_arc(csv, epochs=200, batch_size=256, lr=0.001,patience =20, save = "C:\\Studia\\Progranmy\\AnalizaElipsometrii\\Scanner\\modelScanner.pt"):
+def training_arc(csv, epochs=200, batch_size=256, lr=0.001,patience =20, save = "C:\\Studia\\Progranmy\\AnalizaElipsometrii\\Scanner\\modelScanner2.pt"):
     train, test, input_dim = dara_loaders(csv, batch_size=batch_size)
     
     model = MLP(input_dim)
     #criterion = nn.SmoothL1Loss()
     optimizer = optim.Ranger(model.parameters(), lr=lr)
-    scheduler = optim.lr_scheduler.ReduceLROnPlateau(optimizer, mode = 'min', factor=0.5, patience=5, verbose=True)
+    scheduler = t_optim.lr_scheduler.ReduceLROnPlateau(optimizer, mode = 'min', factor=0.5, patience=5)
     best_loss = float('inf')
     patience_count = 0
     
@@ -49,7 +50,7 @@ def training_arc(csv, epochs=200, batch_size=256, lr=0.001,patience =20, save = 
             optimizer.zero_grad()
             outputs = model(X_batch)
             diff = torch.abs(outputs - y_batch)
-            loss = torch.mean(diff[:, 0]) + 5.0 * torch.mean(diff[:, 1])
+            loss = torch.mean(diff[:, 0]) + 2.0 * torch.mean(diff[:, 1])
             loss.backward()
             optimizer.step()
             run_loss += loss.item()
@@ -72,7 +73,7 @@ def training_arc(csv, epochs=200, batch_size=256, lr=0.001,patience =20, save = 
     evaluation(model,test)
     return model
 
-def evaluation(model, test_loader, Ntolerance = 0.05, Ktolerance = 0.01):
+def evaluation(model, test_loader, Ntolerance = 0.05, Ktolerance = 0.05):
     model.eval()
     total_MSE = 0.0
     total_MAE = 0.0
@@ -108,4 +109,4 @@ def evaluation(model, test_loader, Ntolerance = 0.05, Ktolerance = 0.01):
 
     return avg_MSE, avg_MAE, A_n, A_k
 
-#training_arc("C:\\Studia\\Progranmy\\AnalizaElipsometrii\\Scanner\\PreparedMaterials.csv")
+training_arc("C:\\Studia\\Progranmy\\AnalizaElipsometrii\\Scanner\\PreparedMaterials.csv")
