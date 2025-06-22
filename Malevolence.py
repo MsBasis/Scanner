@@ -41,20 +41,21 @@ def training_arc(csv, epochs=20, batch_size=128, lr=0.001, save = "C:\\Studia\\P
         avgLoss = run_loss / len(train)
         print(f"[Epoka {epoch:02d}] Średni loss: {avgLoss:.6f}")  
 
+    evaluation(model,test,criterion)
+    torch.save(model.state_dict(), save)
+    return model
+
+def evaluation(model, test_loader, criterion):
     model.eval()
+    total_loss = 0.0
     with torch.no_grad():
-        total_loss = 0.0
-        for X_batch, y_batch in test:
+        for X_batch, y_batch in test_loader:
             outputs = model(X_batch)
             loss = criterion(outputs, y_batch)
             total_loss += loss.item()
 
-        avg_test_loss = total_loss / len(test)
-        print(f"\nTest MSE: {avg_test_loss:.6f}")
-        
-    torch.save(model.state_dict(), save)
-    return model
-
-
+    avg_test_loss = total_loss / len(test_loader)
+    print(f"\nTest MSE: {avg_test_loss:.6f}")
+    return avg_test_loss
 
 #training_arc("C:\\Studia\\Progranmy\\AnalizaElipsometrii\\Scanner\\PreparedMaterials.csv")
